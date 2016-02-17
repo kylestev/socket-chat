@@ -2,11 +2,7 @@ import Minimist from 'minimist'
 import SocketServer from 'socket.io'
 
 import { ChatServer } from './chat/ChatServer'
-import { Config } from './chat/Config'
-
 import * as middleware from './chat/middleware'
-
-import { manager } from './chat/permissions/index'
 
 const debug = require('debug')('server')
 
