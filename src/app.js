@@ -4,6 +4,8 @@ import SocketServer from 'socket.io'
 import { ChatServer } from './chat/ChatServer'
 import * as middleware from './chat/middleware'
 
+require('dotenv').config()
+
 const debug = require('debug')('server')
 
 /**

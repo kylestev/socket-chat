@@ -4,8 +4,8 @@ import { User } from '../User'
 const debug = require('debug')('auth-jwt')
 
 class JWTAuthProvider {
-  constructor(config) {
-    this._secret = config.get('jwt.secret')
+  constructor() {
+    this._secret = process.env.JWT_SECRET
   }
 
   _createUser(decoded) {

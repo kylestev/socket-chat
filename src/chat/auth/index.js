@@ -1,12 +1,10 @@
-import { Config } from '../Config'
 import { JWTAuthProvider } from './JWTAuthProvider'
 
-const createAuthProvider = (config) => {
-  return new JWTAuthProvider(config)
+const createAuthProvider = () => {
+  return new JWTAuthProvider()
 }
 
-const authConfig = new Config(__dirname + '/../../../config/auth.json')
-const authProvider = createAuthProvider(authConfig)
+const authProvider = createAuthProvider()
 
 const verifyUser = (credentials) => {
   return authProvider.verifyUser(credentials)
