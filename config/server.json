@@ -1,0 +1,17 @@
+{
+    "spam": {
+        "rateLimit": {
+            "decay": 5,
+            "maxMessageBurst": 3,
+            "cacheKeyPrefix": "user-messages"
+        },
+        "words": [
+            "http://",
+            "https://",
+            "www.",
+            ".com",
+            ".net",
+            ".org"
+        ]
+    }
+}
