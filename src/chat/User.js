@@ -1,22 +1,29 @@
-
-
 class User {
-  constructor(uid, socket) {
-    this.uid = uid
-    this.socket = socket
-    this._props = {}
+  constructor(uid, username, props = {}) {
+    this._uid = uid
+    this._username = username
+    // this._socket = socket
+    this._props = props
   }
 
-  can(permission) {
-    //
-  }
-
-  prop(name) {
-    return this._props[name]
+  get emailHash() {
+    return this._props.email_hash
   }
 
   get role() {
-    return this.props.role_id
+    return this._props.role
+  }
+
+  // get socket() {
+  //   return this._socket
+  // }
+
+  get uid() {
+    return this._uid
+  }
+
+  get username() {
+    return this._username
   }
 }
 

@@ -17,11 +17,11 @@ class ChatCommand {
   /**
    * Checks to see if the sender can perform this command
    * @param  {User}  sender user executing the command
-   * @return {Promise.<Boolean>}
+   * @return {Boolean}
    */
   isAllowed(sender) {
     if (! this._action) {
-      return Promise.resolve(true)
+      return true
     }
 
     return manager.can(this._action, sender)
@@ -34,14 +34,11 @@ class ChatCommand {
    * @return {Promise.<Message>}
    */
   handle(message, pieces) {
-    return this.isAllowed(message.sender)
-      .then(allowed => {
-        if (! allowed) {
-          throw new Error('You are not allowed to ' + this._action)
-        }
+    if (! this.isAllowed(message.sender)) {
+      throw new Error('You are not allowed to ' + this._action)
+    }
 
-        return this.process(message, pieces)
-      })
+    return this.process(message, pieces)
   }
 
   /**

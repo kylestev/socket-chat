@@ -27,12 +27,11 @@ class PermissionManager {
    */
   can(action, user) {
     let whitelistedRoles = this.actions[action]
-    return user.getRole()
-      .then(role => {
-        let allowed = whitelistedRoles.includes(role)
-        debug(user.username + ' can "' + action + '"? ' + allowed)
-        return allowed
-      })
+    let allowed = whitelistedRoles.includes(user.role)
+
+    debug(user.username + ' can "' + action + '"? ' + allowed)
+
+    return allowed
   }
 }
 
