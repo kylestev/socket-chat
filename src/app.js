@@ -8,6 +8,8 @@ import * as middleware from './chat/middleware'
 
 import { manager } from './chat/permissions/index'
 
+const debug = require('debug')('server')
+
 /**
  * Creates a new socket.io/Server instance
  * @return {socket.io/Server} socket.io/Server instance
@@ -16,7 +18,7 @@ let createSocketIO = () => {
   const sio = new SocketServer(8080)
 
   sio.on('connection', (socket) => {
-    console.log('new conn', socket.id)
+    debug('new conn: ' + socket.id)
   })
 
   return sio
@@ -57,16 +59,13 @@ let createChatServer = (args) => {
   return server
 }
 
+/**
+ * Gets the action (first argument) passed in via the CLI
+ * @param  {Minimist} args
+ * @return {String} first argument or {@code 'run'} if no action is present
+ */
 let parseCliAction = (args) => {
-  return (args._ || ['run'])[0]
-}
-
-let user = {
-  uid: 5,
-  username: 'Bit',
-  getRole() {
-    return Promise.resolve('Admin')
-  }
+  return args._[0] || 'run'
 }
 
 let args = parseArgs()
@@ -76,13 +75,11 @@ switch (parseCliAction(args)) {
   case 'middleware:list':
     console.log(Object.keys(chatServer.middleware))
     process.exit()
-  break
+    break
   case 'run':
-    chatServer.listen(args.port || 8888)
-    chatServer.handleMessage({
-      sender: user,
-      body: '/announce <script>alert("yeeee")</script>'
-    })
-  break
+    const port = args.port || 8888
+    chatServer.listen(port)
+    debug('listening on port: ' + port)
+    break
 }
 

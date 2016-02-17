@@ -1,3 +1,5 @@
+const debug = require('debug')('permissions')
+
 /**
  * Manages permissions via actions and roles.
  */
@@ -26,7 +28,11 @@ class PermissionManager {
   can(action, user) {
     let whitelistedRoles = this.actions[action]
     return user.getRole()
-      .then(role => whitelistedRoles.includes(role))
+      .then(role => {
+        let allowed = whitelistedRoles.includes(role)
+        debug(user.username + ' can "' + action + '"? ' + allowed)
+        return allowed
+      })
   }
 }
 

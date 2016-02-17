@@ -1,6 +1,8 @@
 import * as _ from 'lodash'
 import { Config } from './Config'
 
+const debugMiddleware = require('debug')('middleware')
+
 /**
  * Chat Server
  */
@@ -39,11 +41,11 @@ class ChatServer {
   handleMessage(message) {
     try {
       this._messageMiddleware.forEach(middleware => {
-        console.log('[middleware]:', middleware.constructor.name)
-        middleware.handle(message, (msg) => console.log('next called', msg))
+        debugMiddleware('running: ' + middleware.constructor.name)
+        middleware.handle(message, (msg) => debugMiddleware('next called: ' + msg))
       })
     } catch (e) {
-      console.log(e)
+      debugMiddleware('error: ' + e.message)
       return false
     }
     return true
