@@ -1,0 +1,10 @@
+chat:
+  build: .
+  volumes:
+   - .:/code
+  ports:
+    - "43594:8080"
+  links:
+    - redis
+redis:
+  image: redis

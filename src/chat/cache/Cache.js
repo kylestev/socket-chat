@@ -91,7 +91,7 @@ class Cache {
   }
 
   static make(keyPrefix = '') {
-    let client = redis.createClient()
+    let client = redis.createClient({ host: process.env.REDIS_HOST || '127.0.0.1' })
     return new Cache({ client, keyPrefix })
   }
 }
