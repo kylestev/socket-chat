@@ -1,4 +1,32 @@
-const redis = require('redis')
+import url from 'url'
+import redis from 'redis'
+import * as _ from 'lodash'
+
+/**
+ * Parses any docker-compose linked services-styled environment variables
+ * prefixed with {@code 'REDIS_'} and suffixed with {@code '_PORT'} to
+ * allow for detection of services.
+ * @return {Array.<Object>} array of objects containing the host and port
+ */
+const parseRedisEnvConnections = () => {
+  return Object.keys(process.env)
+    .filter(key => /^REDIS_\d+_PORT$/.test(key))
+    .map(key => url.parse(process.env[key]))
+    .map(uri => ({ port: uri.port, host: uri.hostname }))
+}
+
+/**
+ * Attempts to find docker-compose styled environment variables - if more than
+ * one docker-compose link is present, it will randomly select one.
+ * @return {Object} object containing host and port key-value-pairs
+ */
+const chooseRedisConnection = () => {
+  let available = parseRedisEnvConnections()
+  if (available.length > 0) {
+    return _.sample(available)
+  }
+  return { host: '127.0.0.1', port: 6379 }
+}
 
 class Cache {
   constructor({ client, keyPrefix }) {
@@ -91,7 +119,7 @@ class Cache {
   }
 
   static make(keyPrefix = '') {
-    let client = redis.createClient({ host: process.env.REDIS_HOST || '127.0.0.1' })
+    let client = redis.createClient(chooseRedisConnection())
     return new Cache({ client, keyPrefix })
   }
 }
